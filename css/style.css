@@ -160,3 +160,60 @@ h1 {
 #cancel-guest-button:hover {
     background-color: #da190b;
 }
+
+/* --- Responsive Styles --- */
+
+/* For Tablets and smaller devices */
+@media (max-width: 768px) {
+    h1 {
+        /* Adjust the clamp values for smaller screens */
+        font-size: clamp(2rem, 10vw, 3.5rem);
+    }
+
+    .id-input {
+        margin-top: 150px; /* Reduce top margin to save vertical space */
+        width: clamp(250px, 70vw, 400px); /* Allow input to be wider on smaller screens */
+    }
+
+    .modal-content {
+        width: 70%;
+        padding: 25px;
+    }
+}
+
+/* For Mobile phones */
+@media (max-width: 480px) {
+    .main-content {
+        width: 90%; /* Ensure content doesn't touch screen edges */
+    }
+    
+    .id-input {
+        margin-top: 100px;
+        width: 90%; /* Make input field take most of the screen width */
+    }
+
+    #confirmation-area p {
+        font-size: 1.2rem;
+    }
+
+    .modal-content {
+        width: 85%;
+        padding: 20px;
+    }
+
+    .modal-content p {
+        font-size: 1rem;
+    }
+
+    .modal-buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .modal-buttons button {
+        width: 80%;
+        margin: 8px 0; /* Stack buttons with space in between */
+        padding: 12px;
+    }
+}
