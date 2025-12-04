@@ -8,7 +8,7 @@ body, html {
 
 body {
     /* Default background for desktops/laptops */
-    background-image: url('../res/background-desktop.png');
+    background-image: url('../res/background.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
