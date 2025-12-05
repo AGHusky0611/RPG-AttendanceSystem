@@ -52,12 +52,16 @@ function parseCsv(text, idCol, nameCol, isOfficerList = false) {
  */
 async function loadStudentData() {
     try {
-        const officerResponse = await fetch('res/MembersList.csv');
+        // Correctly fetch and parse the Officers list
+        const officerResponse = await fetch('res/OfficersList.csv');
         const officerText = await officerResponse.text();
+        // For OfficersList.csv: ID is in email (col 3), Name is in col 0
         parseCsv(officerText, 3, 0, true);
 
-        const memberResponse = await fetch('res/OfficersList.csv');
+        // Correctly fetch and parse the Members list
+        const memberResponse = await fetch('res/MembersList.csv');
         const memberText = await memberResponse.text();
+        // For MembersList.csv: ID is in col 2, Name is in col 1
         parseCsv(memberText, 2, 1);
 
         console.log(`Loaded ${studentData.size} students.`);
@@ -86,12 +90,24 @@ idInput.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
         event.preventDefault();
         const enteredId = idInput.value.trim();
+        statusMessageEl.textContent = ''; // Clear previous messages
+
+        // Validate input
+        if (enteredId === '') {
+            statusMessageEl.textContent = 'Please enter your SLU ID.';
+            return; // Stop if input is empty
+        }
+        if (!/^\d+$/.test(enteredId)) {
+            statusMessageEl.textContent = 'SLU ID must contain only numbers.';
+            idInput.value = ''; // Clear the invalid input
+            return; // Stop if input is not a number
+        }
+
         if (studentData.has(enteredId)) {
             const name = studentData.get(enteredId);
             currentStudent = { id: enteredId, name: name };
             studentNameEl.textContent = name;
             confirmationArea.style.display = 'block';
-            statusMessageEl.textContent = '';
         } else {
             // Handle unregistered members with custom modal
             currentStudent = null;

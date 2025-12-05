@@ -56,6 +56,23 @@ h1 {
     opacity: 1;
 }
 
+.submit-button {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1rem;
+    padding: 10px 20px;
+    margin-top: 20px; /* Keep consistent spacing from input */
+    background-color: #3a5996;
+    color: #f7e854;
+    border: 2px solid #f7e854;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.submit-button:hover {
+    background-color: #4a69a6;
+}
+
 /* New Styles for Confirmation */
 #confirmation-area {
     margin-top: 20px;
@@ -164,7 +181,7 @@ h1 {
 
 /* --- Responsive Styles --- */
 
-/* For Tablets and smaller devices */
+/* For Tablets and smaller devices (up to 768px wide) */
 @media (max-width: 768px) {
     body {
         /* This background will apply to tablets */
@@ -172,13 +189,17 @@ h1 {
     }
 
     h1 {
-        /* Adjust the clamp values for smaller screens */
         font-size: clamp(2rem, 10vw, 3.5rem);
     }
 
     .id-input {
-        margin-top: 150px; /* Reduce top margin to save vertical space */
-        width: clamp(250px, 70vw, 400px); /* Allow input to be wider on smaller screens */
+        margin-top: 150px;
+        width: clamp(250px, 70vw, 400px);
+    }
+
+    .submit-button {
+        padding: 12px 25px; /* Slightly larger touch target */
+        font-size: 1.1rem; /* Slightly larger text */
     }
 
     .modal-content {
@@ -187,7 +208,7 @@ h1 {
     }
 }
 
-/* For Mobile phones */
+/* For Mobile phones (up to 480px wide) */
 @media (max-width: 480px) {
     body {
         /* This will override the tablet background on phones */
@@ -195,12 +216,17 @@ h1 {
     }
 
     .main-content {
-        width: 90%; /* Ensure content doesn't touch screen edges */
+        width: 90%;
     }
     
     .id-input {
         margin-top: 100px;
-        width: 90%; /* Make input field take most of the screen width */
+        width: 90%;
+    }
+
+    .submit-button {
+        padding: 15px 30px; /* Even larger touch target for phones */
+        font-size: 1.2rem;
     }
 
     #confirmation-area p {
@@ -224,7 +250,7 @@ h1 {
 
     .modal-buttons button {
         width: 80%;
-        margin: 8px 0; /* Stack buttons with space in between */
+        margin: 8px 0;
         padding: 12px;
     }
 }
