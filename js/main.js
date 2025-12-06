@@ -26,18 +26,25 @@ let currentStudent = null;
  * @param {string} text The raw CSV text.
  * @param {number} idCol The column index for the SLU ID.
  * @param {number} nameCol The column index for the Name.
+ * @param {number} linesToSkip The number of header lines to skip.
  * @param {boolean} isOfficerList A flag to handle the different CSV formats.
  */
-function parseCsv(text, idCol, nameCol, isOfficerList = false) {
-    const lines = text.split('\n').slice(3); // Skip header lines
+function parseCsv(text, idCol, nameCol, linesToSkip, isOfficerList = false) {
+    const lines = text.split('\n').slice(linesToSkip);
     for (const line of lines) {
-        const columns = line.split(',');
+        if (!line.trim()) continue; // Skip empty lines
+
+        // Robustly split CSV on commas that are not inside double quotes.
+        const columns = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+
         if (columns.length > Math.max(idCol, nameCol)) {
-            let id = columns[idCol]?.trim();
+            // Trim and remove quotes from fields
+            let id = columns[idCol]?.trim().replace(/"/g, '');
             const name = columns[nameCol]?.trim().replace(/"/g, '');
 
             if (isOfficerList && id.includes('@')) {
-                id = id.split('@')[0]; // Extract ID from email
+                // Extract the part before the '@' and then remove any non-digit characters
+                id = id.split('@')[0].replace(/\D/g, '');
             }
 
             if (id && name && /^\d+$/.test(id)) { // Ensure ID is a number
@@ -55,14 +62,14 @@ async function loadStudentData() {
         // Correctly fetch and parse the Officers list
         const officerResponse = await fetch('res/OfficersList.csv');
         const officerText = await officerResponse.text();
-        // For OfficersList.csv: ID is in email (col 3), Name is in col 0
-        parseCsv(officerText, 3, 0, true);
+        // For OfficersList.csv: ID is in email (col 3), Name is in col 0. Skip 3 header lines.
+        parseCsv(officerText, 3, 0, 3, true);
 
         // Correctly fetch and parse the Members list
         const memberResponse = await fetch('res/MembersList.csv');
         const memberText = await memberResponse.text();
-        // For MembersList.csv: ID is in col 2, Name is in col 1
-        parseCsv(memberText, 2, 1);
+        // For MembersList.csv: ID is in col 2, Name is in col 1. Skip 2 header lines.
+        parseCsv(memberText, 2, 1, 2);
 
         console.log(`Loaded ${studentData.size} students.`);
     } catch (error) {
